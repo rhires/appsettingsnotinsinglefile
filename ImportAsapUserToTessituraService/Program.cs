@@ -28,7 +28,7 @@ namespace ImportAsapUserToTessituraService
             try
             {
                 Log.Information("====================================================================");
-                Log.Information($"Application Starts. Version: {System.Reflection.Assembly.GetEntryAssembly()?.GetName().Version}");
+                Log.Information($"Application Start. Version: {System.Reflection.Assembly.GetEntryAssembly()?.GetName().Version}");
                 Log.Information($"Application Directory: {AppDomain.CurrentDomain.BaseDirectory}");
                 CreateHostBuilder(args).Build().Run();
             }
@@ -48,6 +48,7 @@ namespace ImportAsapUserToTessituraService
                 .UseWindowsService()
                 .ConfigureServices((hostContext, services) =>
                 {
+	                services.Configure<ServerSettings>(hostContext.Configuration.GetSection("ServerSettings"));
                     services.AddHostedService<Worker>();
                 })
                 .UseSerilog();
