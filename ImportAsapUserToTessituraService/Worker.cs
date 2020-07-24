@@ -11,20 +11,24 @@ namespace ImportAsapUserToTessituraService
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly Uri _serverSettings;
+        private readonly Uri _serverAddress;
         public Worker(ILogger<Worker> logger, IOptions<ServerSettings> serverSettings)
         {
             _logger = logger;
-            _serverSettings = serverSettings.Value.ServerAddress;
+            _serverAddress = serverSettings.Value.ServerAddress;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             try
             {
-	            var httpClient = new HttpClient();
-                var response = await httpClient.GetAsync($"{_serverSettings}api/Importapi", stoppingToken);
-                response.EnsureSuccessStatusCode();
+	            using (var client = new HttpClient())
+	            {
+		            client.BaseAddress = _serverAddress;
+		            var response = await client.GetAsync("api/Importapi", stoppingToken);
+		            response.EnsureSuccessStatusCode();
+	            }
+               
                 _logger.LogInformation($"Daily run completed successfully at {DateTime.Now}");
             }
             catch (Exception ex)
