@@ -25,7 +25,9 @@ namespace ImportAsapUserToTessituraService
 	            using (var client = new HttpClient())
 	            {
 		            client.BaseAddress = _serverAddress;
-		            var response = await client.GetAsync("api/Importapi", stoppingToken);
+		            _logger.LogInformation($"{Environments.Development}");
+		            _logger.LogInformation($"{_serverAddress}api/Importapi");
+		            var response = await client.GetAsync($"{client.BaseAddress}api/Importapi", stoppingToken);
 		            response.EnsureSuccessStatusCode();
 	            }
                

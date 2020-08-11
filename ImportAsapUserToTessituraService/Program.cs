@@ -46,6 +46,10 @@ namespace ImportAsapUserToTessituraService
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseWindowsService()
+                .ConfigureAppConfiguration((context, config) =>
+                {
+	                // configure the app here.
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
 	                services.Configure<ServerSettings>(hostContext.Configuration.GetSection("ServerSettings"));
